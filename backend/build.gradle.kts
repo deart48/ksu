@@ -28,7 +28,7 @@ dependencies {
 
     //implementation("org.jetbrains.exposed:exposed-java-time:0.50.1")
 
-    implementation("io.ktor:ktor-serialization-gson-jvm:2.3.7")
+    implementation("io.ktor:ktor-serialization-gson-jvm:3.6.1")
 
     implementation("org.jetbrains.exposed:exposed-java-time:0.44.1")
 
