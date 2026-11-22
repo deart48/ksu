@@ -1,0 +1,31 @@
+# Environment and local secrets
+.env
+.env.*
+!.env.example
+local.properties
+android/local.properties
+!android/local.properties.example
+
+# IDE and OS
+.idea/
+*.iml
+.vscode/
+tmp/
+*.DS_Store
+Thumbs.db
+
+# Gradle and build outputs
+.gradle/
+.kotlin/
+build/
+**/build/
+*.apk
+*.aab
+*.dm
+*.bak
+
+# Release artifacts and uploaded user media
+release/
+android/app/release/
+backend/uploads/*
+!backend/uploads/.gitkeep

@@ -1,0 +1,74 @@
+package com.example.myvoronesh
+
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.ui.Modifier
+import com.example.myvoronesh.core.ui.theme.MyVORONESHTheme
+import com.example.myvoronesh.core.ui.theme.ThemeManager
+import com.example.myvoronesh.core.navigation.AppNavigation
+import com.yandex.mapkit.MapKitFactory
+
+class MainActivity : ComponentActivity() {
+
+    companion object {
+        init {
+            try {
+                val apiKey = BuildConfig.MAPKIT_API_KEY
+                if (apiKey.isNotBlank()) {
+                    MapKitFactory.setApiKey(apiKey)
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        try {
+            MapKitFactory.initialize(this)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+        ThemeManager.init(this)
+        enableEdgeToEdge()
+
+        setContent {
+            MyVORONESHTheme(
+                darkTheme = ThemeManager.isDarkTheme,
+                dynamicColor = false
+            ) {
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    AppNavigation()
+                }
+            }
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        try {
+            MapKitFactory.getInstance()?.onStart()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    override fun onStop() {
+        try {
+            MapKitFactory.getInstance()?.onStop()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        super.onStop()
+    }
+}
