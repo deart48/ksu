@@ -1,0 +1,10 @@
+.gradle/
+.idea/
+.kotlin/
+build/
+uploads/*
+!uploads/.gitkeep
+.env
+.env.*
+*.iml
+*.log

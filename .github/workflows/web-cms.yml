@@ -1,0 +1,57 @@
+name: Web CMS CI
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'web-cms/**'
+      - '.github/workflows/web-cms.yml'
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - 'web-cms/**'
+      - '.github/workflows/web-cms.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: web-cms-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  web-cms:
+    name: Admin Web CMS (React / TypeScript)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check web-cms presence
+        id: check
+        run: |
+          if [ -f "web-cms/package.json" ]; then
+            echo "present=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "present=false" >> "$GITHUB_OUTPUT"
+            echo "web-cms/package.json is not yet present; skipping Web CMS build."
+          fi
+
+      - name: Set up Node.js 22
+        if: steps.check.outputs.present == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: web-cms/package-lock.json
+
+      - name: Install dependencies, lint, test, and build
+        if: steps.check.outputs.present == 'true'
+        working-directory: web-cms
+        run: |
+          npm ci
+          npm run lint --if-present
+          npm run typecheck --if-present
+          npm test --if-present
+          npm run build

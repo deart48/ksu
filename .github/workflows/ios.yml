@@ -1,0 +1,81 @@
+name: iOS & KMP CI
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'iosApp/**'
+      - 'shared/**'
+      - '.github/workflows/ios.yml'
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - 'iosApp/**'
+      - 'shared/**'
+      - '.github/workflows/ios.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: ios-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  ios-build-and-test:
+    name: iOS / KMP Build & Test (macOS)
+    runs-on: macos-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check KMP / iOS modules presence
+        id: check
+        run: |
+          if [ -d "iosApp" ] || [ -d "shared" ]; then
+            echo "present=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "present=false" >> "$GITHUB_OUTPUT"
+            echo "KMP shared/ and iosApp/ modules are not yet present; skipping macOS build."
+          fi
+
+      - name: Set up JDK 21
+        if: steps.check.outputs.present == 'true'
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Setup Gradle
+        if: steps.check.outputs.present == 'true'
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Build KMP shared framework and run iOS tests
+        if: steps.check.outputs.present == 'true'
+        run: |
+          if [ -f "./gradlew" ]; then
+            chmod +x ./gradlew
+            ./gradlew :shared:iosSimulatorArm64Test :shared:linkDebugFrameworkIosSimulatorArm64 --no-daemon
+          fi
+
+      - name: Build iosApp for iOS Simulator
+        if: steps.check.outputs.present == 'true'
+        run: |
+          if ls iosApp/*.xcworkspace 1> /dev/null 2>&1; then
+            WORKSPACE=$(ls -d iosApp/*.xcworkspace | head -n 1)
+            xcodebuild -workspace "$WORKSPACE" \
+              -scheme iosApp \
+              -sdk iphonesimulator \
+              -destination 'generic/platform=iOS Simulator' \
+              CODE_SIGNING_ALLOWED=NO \
+              build
+          elif ls iosApp/*.xcodeproj 1> /dev/null 2>&1; then
+            PROJECT=$(ls -d iosApp/*.xcodeproj | head -n 1)
+            xcodebuild -project "$PROJECT" \
+              -scheme iosApp \
+              -sdk iphonesimulator \
+              -destination 'generic/platform=iOS Simulator' \
+              CODE_SIGNING_ALLOWED=NO \
+              build
+          fi
