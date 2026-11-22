@@ -5,6 +5,9 @@
 local.properties
 android/local.properties
 !android/local.properties.example
+*.jks
+*.keystore
+*.p12
 
 # IDE and OS
 .idea/

@@ -227,12 +227,12 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Пользователи приложения';
 
 --
--- Дамп данных таблицы `users`
+-- Дамп данных таблицы `users` (синтетические демо-аккаунты, пароль: demo1234)
 --
 
 INSERT INTO `users` (`id`, `login`, `password_hash`, `email`, `name`, `birth_date`, `avatar_url`, `is_active`, `created_at`, `updated_at`, `last_login_at`) VALUES
-('550e8400-e29b-41d4-a716-446655440001', 'test_user1', '$2a$10$V1dRZvZcd2n.NZSaLSCNzOQFd3iW8i2.4xzCnfboQqkTefIhVCkUW', 'test1@example.cot', 'Алексей Петроvv', '2019-11-10', 'uploads/avatars/550e8400-e29b-41d4-a716-446655440001.jpg', 1, '2024-01-15 07:00:00', '2026-01-29 13:30:51', '2025-12-18 19:12:48'),
-('550e8400-e29b-41d4-a716-446655440002', 'test_user2', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'test2@example.com', 'Мария Иванова', '1998-11-22', 'uploads/avatars/550e8400-e29b-41d4-a716-446655440002.png', 1, '2024-06-01 11:30:00', '2025-12-13 16:08:27', '2025-12-13 16:08:27');
+('550e8400-e29b-41d4-a716-446655440001', 'demo_user1', '$2a$10$GhD3PaXWTrmmQnQixRTHy.NM9u1gTNT.NXCNRHYL3VONxxGsLc1Em', 'demo1@example.com', 'Демо Путешественник', '1998-05-15', NULL, 1, '2024-01-15 07:00:00', '2026-01-29 13:30:51', '2025-12-18 19:12:48'),
+('550e8400-e29b-41d4-a716-446655440002', 'demo_user2', '$2a$10$dLCxqhhplJPnZTexzLg2J.3V5GANO4LrNAOW5Gko3J4Uv7grlo/lm', 'demo2@example.com', 'Демо Исследователь', '1999-11-22', NULL, 1, '2024-06-01 11:30:00', '2025-12-13 16:08:27', '2025-12-13 16:08:27');
 
 -- --------------------------------------------------------
 
@@ -276,22 +276,15 @@ CREATE TABLE `user_photos` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Фотографии пользователей';
 
 --
--- Дамп данных таблицы `user_photos`
+-- Дамп данных таблицы `user_photos` (синтетические демо-записи без личных медиафайлов)
 --
 
 INSERT INTO `user_photos` (`id`, `user_id`, `point_id`, `photo_url`, `thumbnail_url`, `description`, `is_public`, `created_at`) VALUES
-('08c7f2d0-26a9-4869-9651-23ffd8e11eab', '550e8400-e29b-41d4-a716-446655440001', '78e6bfea-d8ef-11f0-b4b0-d88083cf072b', 'uploads/photos/550e8400-e29b-41d4-a716-446655440001/08c7f2d0-26a9-4869-9651-23ffd8e11eab.jpg', NULL, 'Памятник Славы', 0, '2025-12-14 16:38:28'),
-('433b0842-2feb-41d8-9cd1-206f855ef57c', '550e8400-e29b-41d4-a716-446655440001', 'mus_2', 'uploads/photos/550e8400-e29b-41d4-a716-446655440001/433b0842-2feb-41d8-9cd1-206f855ef57c.jpg', NULL, 'Воронежская филармония', 0, '2025-12-14 09:23:30'),
-('6d7ea73f-1d5f-4f92-a5c0-6e4e4b312b14', '550e8400-e29b-41d4-a716-446655440001', 'arch_3', 'uploads/photos/550e8400-e29b-41d4-a716-446655440001/6d7ea73f-1d5f-4f92-a5c0-6e4e4b312b14.jpg', NULL, '', 0, '2025-12-16 19:08:24'),
-('718a1fb3-e925-46e6-8f91-0b520b9d0f3b', '550e8400-e29b-41d4-a716-446655440002', 'park_4', 'uploads/photos/550e8400-e29b-41d4-a716-446655440002/718a1fb3-e925-46e6-8f91-0b520b9d0f3b.png', NULL, 'Парк \"Алые паруса\"', 0, '2025-12-13 16:08:47'),
-('77375f5e-db18-4eb2-8d37-2b1628806cbd', '550e8400-e29b-41d4-a716-446655440002', 'art_5', 'uploads/photos/550e8400-e29b-41d4-a716-446655440002/77375f5e-db18-4eb2-8d37-2b1628806cbd.png', NULL, 'Арт-объект \"Стул\"', 0, '2025-12-13 16:19:19'),
-('8a5e623c-5f6e-4ddd-a1a4-5210fc30128b', '550e8400-e29b-41d4-a716-446655440001', 'arch_3', 'uploads/photos/550e8400-e29b-41d4-a716-446655440001/8a5e623c-5f6e-4ddd-a1a4-5210fc30128b.jpg', NULL, '', 0, '2025-12-16 19:19:49'),
-('8b4297a4-7f51-411d-ac2e-b701fcd53b89', '550e8400-e29b-41d4-a716-446655440001', 'bac197f5-d8f0-11f0-b4b0-d88083cf072b', 'uploads/photos/550e8400-e29b-41d4-a716-446655440001/8b4297a4-7f51-411d-ac2e-b701fcd53b89.jpg', NULL, 'Памятник Ивану Бунину', 0, '2025-12-25 14:47:29'),
-('ae552654-875a-4293-bf56-dae85eed366a', '550e8400-e29b-41d4-a716-446655440001', 'arch_10', 'uploads/photos/550e8400-e29b-41d4-a716-446655440001/ae552654-875a-4293-bf56-dae85eed366a.jpg', NULL, 'Благовещенский кафедральный собор', 0, '2025-12-14 21:30:58'),
-('b978aced-4fa8-4fd9-bb9a-1869ff02f881', '550e8400-e29b-41d4-a716-446655440001', 'arch_3', 'uploads/photos/550e8400-e29b-41d4-a716-446655440001/b978aced-4fa8-4fd9-bb9a-1869ff02f881.jpg', NULL, '', 0, '2025-12-16 19:20:07'),
-('dca096e7-f514-48a3-8663-60fe84b9d44b', '550e8400-e29b-41d4-a716-446655440001', 'arch_11', 'uploads/photos/550e8400-e29b-41d4-a716-446655440001/dca096e7-f514-48a3-8663-60fe84b9d44b.jpg', NULL, 'Дом купца Клочкова', 0, '2025-12-14 21:30:28'),
-('photo-101', '550e8400-e29b-41d4-a716-446655440002', 'park_1', 'photos/user2/koltsov_1.jpg', NULL, 'Красивый фонтан!', 0, '2024-06-05 11:45:00'),
-('photo-103', '550e8400-e29b-41d4-a716-446655440002', 'art_2', 'photos/user2/kotyonok_1.jpg', NULL, 'Котёнок с улицы Лизюкова ❤️', 0, '2024-06-10 09:10:00');
+('demo-photo-001', '550e8400-e29b-41d4-a716-446655440001', '78e6bfea-d8ef-11f0-b4b0-d88083cf072b', 'photos/demo/demo_glory.jpg', NULL, 'Памятник Славы (демо)', 0, '2025-12-14 16:38:28'),
+('demo-photo-002', '550e8400-e29b-41d4-a716-446655440001', 'mus_2', 'photos/demo/demo_philharmonic.jpg', NULL, 'Воронежская филармония (демо)', 0, '2025-12-14 09:23:30'),
+('demo-photo-003', '550e8400-e29b-41d4-a716-446655440001', 'arch_3', 'photos/demo/demo_railway.jpg', NULL, 'Здание управления ЮВЖД (демо)', 0, '2025-12-16 19:08:24'),
+('demo-photo-004', '550e8400-e29b-41d4-a716-446655440002', 'park_1', 'photos/demo/demo_koltsov_park.jpg', NULL, 'Кольцовский сквер (демо)', 0, '2024-06-05 11:45:00'),
+('demo-photo-005', '550e8400-e29b-41d4-a716-446655440002', 'art_2', 'photos/demo/demo_kotyonok.jpg', NULL, 'Котёнок с улицы Лизюкова (демо)', 0, '2024-06-10 09:10:00');
 
 -- --------------------------------------------------------
 
